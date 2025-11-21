@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accueil de Pierre</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      background: url('https://images.unsplash.com/photo-1549887534-4b4b0d9d2b8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      text-align: center;
+    }
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      min-height: 100vh;
+      padding: 2em;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.2em;
+    }
+    #clock {
+      font-size: 3em;
+      margin-bottom: 0.5em;
+    }
+    #quote {
+      font-style: italic;
+      margin: 1em auto;
+      max-width: 600px;
+    }
+    .shortcuts a {
+      margin: 0 1em;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .search-bar {
+      margin: 2em auto;
+    }
+    .search-bar input {
+      padding: 0.5em;
+      width: 60%;
+      font-size: 1em;
+    }
+    #weather {
+      margin-top: 2em;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>Bienvenue, Pierre</h1>
+    <div id="clock">--:--:--</div>
+    <div id="quote">Chargement de la citation...</div>
+
+    <div class="shortcuts">
+      <a href="https://www.google.com">Google</a>
+      <a href="https://www.youtube.com">YouTube</a>
+      <a href="https://fr.wikipedia.org">Wikipedia</a>
+      <a href="https://www.lemonde.fr">Le Monde</a>
+    </div>
+
+    <div class="search-bar">
+      <form action="https://www.google.com/search" method="get">
+        <input type="text" name="q" placeholder="Rechercher..." />
+      </form>
+    </div>
+
+    <div id="weather">Chargement météo...</div>
+  </div>
+
+  <script>
+    // Horloge
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').textContent = now.toLocaleTimeString('fr-FR');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Citation aléatoire
+    const quotes = [
+      "Le succès n'est pas final. L'échec n'est pas fatal. C'est le courage de continuer qui compte. – Winston Churchill",
+      "Il n'y a qu'une façon d'échouer, c'est d'abandonner avant d'avoir réussi. – Georges Clémenceau",
+      "Fais de ta vie un rêve, et d’un rêve, une réalité. – Antoine de Saint-Exupéry",
+      "La vie, c’est comme une bicyclette, il faut avancer pour ne pas perdre l’équilibre. – Albert Einstein"
+    ];
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById('quote').textContent = randomQuote;
+
+    // Météo Clermont-Ferrand (nécessite une clé API OpenWeatherMap)
+    const apiKey = 'TA_CLE_API_ICI';
+    const city = 'Clermont-Ferrand,FR';
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=fr`)
+      .then(response => response.json())
+      .then(data => {
+        const temp = Math.round(data.main.temp);
+        const desc = data.weather[0].description;
+        document.getElementById('weather').textContent = `🌤️ ${temp}°C à Clermont-Ferrand – ${desc}`;
+      })
+      .catch(() => {
+        document.getElementById('weather').textContent = "Météo indisponible (clé API manquante)";
+      });
+  </script>
+</body>
+</html>
+
